@@ -36,6 +36,7 @@ int main(int argc, char **argv)
         fp = add_flags_tcp(fp);
         fp = add_flags_stream(fp);
         fp = add_flags_tcp_stream(fp);
+        fp = add_flags_psp_stream(fp);
 
         flags_parser_run(fp, argc, argv);
         if (opts.logtostderr)

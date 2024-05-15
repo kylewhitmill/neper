@@ -355,7 +355,7 @@ void control_plane_start(struct control_plane *cp, struct addrinfo **ai)
                                              cp->opts, cp->cb);
                 LOG_INFO(cp->cb, "connected to control port");
                 if (cp->fn->fn_ctrl_client) {
-                        cp->fn->fn_ctrl_client(cp->ctrl_conn, cp->cb);
+                        cp->fn->fn_ctrl_client(cp->ctrl_conn, cp->cb, cp->opts->key_server_port);
                 }
         } else {
                 cp->ctrl_port = ctrl_listen(cp->opts->host,
@@ -363,7 +363,7 @@ void control_plane_start(struct control_plane *cp, struct addrinfo **ai)
                                             cp->opts, cp->cb);
                 LOG_INFO(cp->cb, "opened control port");
                 if (cp-> fn->fn_ctrl_server) {
-                        cp->fn->fn_ctrl_server(cp->ctrl_conn, cp->cb);
+                        cp->fn->fn_ctrl_server(cp->ctrl_conn, cp->cb, cp->opts->key_server_port);
                 }
         }
 }

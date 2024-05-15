@@ -24,7 +24,7 @@
 
 static int kmfd;
 static pthread_t km_thread;
-static const int port = 8973; // arbitrary port number
+//static const int port = 8973; // arbitrary port number
 static pthread_mutex_t psp_key_lock = PTHREAD_MUTEX_INITIALIZER;
 
 static struct listener *listeners;
@@ -40,7 +40,7 @@ static void psp_resize_listeners_or_die(struct thread *ts) {
         listener_space = new_max;
 }
 
-void psp_ctrl_client(int ctrl_conn, struct callbacks *cb) {
+void psp_ctrl_client(int ctrl_conn, struct callbacks *cb, int port) {
         struct sockaddr_in6 kmaddr;
         socklen_t kmaddrlen = sizeof(kmaddr);
 
@@ -81,7 +81,10 @@ static int get_listen_fd(struct callbacks *cb, struct sockaddr_in6 *addr) {
 
 static void *psp_key_server(void *arg)
 {
-        struct callbacks *cb = arg;
+        struct ctrl_key_server *ctrl_key = arg;
+        struct callbacks *cb = ctrl_key->cb;
+        int port = ctrl_key->key_port;
+        //struct callbacks *cb = arg;
         int on = 1;
         int kmlfd, kmfd, len;
         struct sockaddr_in6 kmaddr;
@@ -169,8 +172,14 @@ static void *psp_key_server(void *arg)
         pthread_exit(NULL);
 }
 
-void psp_ctrl_server(int ctrl_conn, struct callbacks *cb) {
-        pthread_create(&km_thread, NULL, psp_key_server, cb);
+void psp_ctrl_server(int ctrl_conn, struct callbacks *cb, int key_server_port) {
+        struct ctrl_key_server psp_key_server_params;
+
+        psp_key_server_params.cb = cb
+        psp_key_server_params.cb = key_server_port;
+
+       // pthread_create(&km_thread, NULL, psp_key_server, cb);
+        pthread_create(&km_thread, NULL, psp_key_server, &psp_key_server_params);
 }
 
 void psp_pre_connect(struct thread *t, int s, struct addrinfo *ai)

@@ -34,11 +34,16 @@ struct key_request {
 struct key_response {
         struct psp_spi_tuple server_tuple;
 };
+// PSP key server call struct
+struct ctrl_key_server {
+        struct  callbacks *cb;
+        int     key_port;
+}
 
 // PSP traffic client.
-void psp_ctrl_client(int ctrl_conn, struct callbacks *cb);
+void psp_ctrl_client(int ctrl_conn, struct callbacks *cb, int key_server_port);
 // PSP traffic server.
-void psp_ctrl_server(int ctrl_conn, struct callbacks *cb);
+void psp_ctrl_server(int ctrl_conn, struct callbacks *cb, int key_server_port);
 // PSP pre-connect routine.
 void psp_pre_connect(struct thread *t, int s, struct addrinfo *ai);
 // PSP post-listener routine.
