@@ -57,7 +57,7 @@ void psp_ctrl_client(int ctrl_conn, struct callbacks *cb, int port) {
         if (connect(kmfd, (const struct sockaddr *)&kmaddr, sizeof(kmaddr)) < 0) {
                 LOG_FATAL(cb, "Can't connect km client socket: %s", strerror(errno));
         }
-        LOG_INFO(cb, "Connected to km socket");
+        LOG_INFO(cb, "Connected to km socket using port %d", port);
 }
 
 static int get_listen_fd(struct callbacks *cb, struct sockaddr_in6 *addr) {
@@ -84,12 +84,15 @@ static void *psp_key_server(void *arg)
         struct ctrl_key_server *ctrl_key = arg;
         struct callbacks *cb = ctrl_key->cb;
         int port = ctrl_key->key_port;
+        free(ctrl_key);
         //struct callbacks *cb = arg;
         int on = 1;
         int kmlfd, kmfd, len;
         struct sockaddr_in6 kmaddr;
         struct sockaddr_in6 acceptaddr;
         socklen_t acceptaddrlen = sizeof(acceptaddr);
+
+        LOG_INFO(cb, "Starting psp_key_server at port %d", port);
 
         memset(&kmaddr, 0, sizeof(kmaddr));
         kmaddr.sin6_family = AF_INET6;
@@ -173,13 +176,19 @@ static void *psp_key_server(void *arg)
 }
 
 void psp_ctrl_server(int ctrl_conn, struct callbacks *cb, int key_server_port) {
-        struct ctrl_key_server psp_key_server_params;
+        struct ctrl_key_server *psp_key_server_params;
 
-        psp_key_server_params.cb = cb
-        psp_key_server_params.cb = key_server_port;
+        LOG_INFO(cb, "Starting psp_ctrl_server thread");
+
+        psp_key_server_params = malloc_or_die (sizeof(struct ctrl_key_server), cb);
+
+        psp_key_server_params->cb = cb;
+        psp_key_server_params->key_port = key_server_port;
+
+        LOG_INFO(psp_key_server_params->cb, "Starting psp_ctrl_server thread: port %d", psp_key_server_params->key_port);
 
        // pthread_create(&km_thread, NULL, psp_key_server, cb);
-        pthread_create(&km_thread, NULL, psp_key_server, &psp_key_server_params);
+        pthread_create(&km_thread, NULL, psp_key_server, (void *)psp_key_server_params);
 }
 
 void psp_pre_connect(struct thread *t, int s, struct addrinfo *ai)

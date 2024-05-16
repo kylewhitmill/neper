@@ -172,7 +172,7 @@ struct flags_parser *add_flags_udp_stream(struct flags_parser *fp)
 struct flags_parser *add_flags_psp_stream(struct flags_parser *fp)
 {
         /* Define flags specialized to only PSP_STREAM */
-        DEFINE_FLAG(fp, const char *, key_server_port,  "17640", 'P', "PSP Key Exchange server port");
+        DEFINE_FLAG(fp, int, key_server_port,  17640, 'k', "PSP Key Exchange server port");
 
         /* Return the updated fp */
         return (fp);

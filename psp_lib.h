@@ -38,7 +38,7 @@ struct key_response {
 struct ctrl_key_server {
         struct  callbacks *cb;
         int     key_port;
-}
+};
 
 // PSP traffic client.
 void psp_ctrl_client(int ctrl_conn, struct callbacks *cb, int key_server_port);

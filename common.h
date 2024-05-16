@@ -75,7 +75,7 @@ struct neper_fn {
         void (*fn_flow_init)(struct thread *, int fd);
         int (*fn_report)(struct thread *);
         void (*fn_ctrl_client)(int ctrl_conn, struct callbacks *cb, int key_port);
-        void (*fn_ctrl_server)(int ctrl_conn, struct callbacks *cb), int key_port);
+        void (*fn_ctrl_server)(int ctrl_conn, struct callbacks *cb, int key_port);
         void (*fn_pre_connect)(struct thread *thread, int fd, struct addrinfo *ai);
         void (*fn_post_listen)(struct thread *thread, int fd, struct addrinfo *ai);
 

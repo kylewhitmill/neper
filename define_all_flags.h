@@ -28,6 +28,7 @@ struct flags_parser *add_flags_stream(struct flags_parser *fp);
 struct flags_parser *add_flags_tcp_rr(struct flags_parser *fp);
 struct flags_parser *add_flags_tcp_crr(struct flags_parser *fp);
 struct flags_parser *add_flags_tcp_stream(struct flags_parser *fp);
+struct flags_parser *add_flags_psp_stream(struct flags_parser *fp);
 struct flags_parser *add_flags_udp_rr(struct flags_parser *fp);
 struct flags_parser *add_flags_udp_stream(struct flags_parser *fp);
 

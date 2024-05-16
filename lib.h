@@ -101,6 +101,7 @@ struct options {
         const char *control_port;
         const char *port;
         int source_port;
+        int key_server_port;
         unsigned long iostat_ms;
         unsigned long wait_start;
         const char *all_samples;
